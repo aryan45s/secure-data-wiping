@@ -59,6 +59,17 @@ body {
   justify-content: center;
 }
 
+.header-icon-wrapper {
+  background: rgba(6, 182, 212, 0.1);
+  padding: 1rem;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
 .header h1 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -174,6 +185,8 @@ body {
 .btn-group {
   display: flex;
   gap: 1rem;
+  width: 100%;
+  justify-content: center;
 }
 
 .btn {

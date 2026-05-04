@@ -98,10 +98,13 @@ function App() {
 
   return (
     <div className="app-container">
-      <div className="header">
-        <h1><Shield size={36} color="#60a5fa" /> Secure Data Wiping</h1>
-        <p>Permanently erase your sensitive data beyond recovery.</p>
-      </div>
+        <div className="header">
+          <div className="header-icon-wrapper">
+            <Shield size={48} color="var(--accent-color)" />
+          </div>
+          <h1>Secure Data Wiping</h1>
+          <p>Irreversible file and free space destruction.</p>
+        </div>
 
       <div className="glass-panel">
         {errorMsg && (

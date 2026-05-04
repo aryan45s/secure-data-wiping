@@ -117,12 +117,20 @@ function App() {
                 : 'Overwriting free space on disk. This may take a while...'}
             </p>
           </div>
-        ) : successData ? (
+               ) : successData ? (
           <div className="success-container">
             <CheckCircle size={64} className="success-icon" />
             <h2 className="success-title">Wipe Complete</h2>
             <p>Your data has been permanently erased.</p>
             
+            <div style={{ marginTop: '1.5rem', marginBottom: '1rem', background: 'white', padding: '1rem', borderRadius: '8px', display: 'inline-block' }}>
+              <QRCodeSVG 
+                value={`https://data-wiping-6bb65.web.app/verify?id=${successData.certificateId}`} 
+                size={128} 
+              />
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Scan to verify certificate</p>
+
             <div className="certificate-info">
               <p><span>Certificate ID:</span> {successData.certificateId}</p>
               <p><span>Mode:</span> {successData.wipeMode}</p>
@@ -137,6 +145,7 @@ function App() {
             </button>
           </div>
         ) : (
+
           <>
             <div className="form-group">
               <label className="form-label">Select Wipe Mode</label>

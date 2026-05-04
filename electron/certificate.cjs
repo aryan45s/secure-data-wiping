@@ -3,13 +3,20 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { v4: uuidv4 } = require('uuid');
+const QRCode = require('qrcode');
 
 function generateCertificate(data) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       const { targetPaths, wipeMode } = data;
       const certId = uuidv4();
       const timestamp = new Date().toISOString();
+      
+      // Create a verification URL (replace with your actual hosted verification page later)
+      const verificationUrl = `https://data-wiping-6bb65.web.app/verify?id=${certId}`;
+      
+      // Generate QR Code as a Data URI
+      const qrCodeDataUri = await QRCode.toDataURL(verificationUrl);
       
       const doc = new PDFDocument({ margin: 50 });
       const certDir = path.join(os.homedir(), 'Documents', 'SecureWipeCertificates');
@@ -48,13 +55,18 @@ function generateCertificate(data) {
         doc.font('Helvetica').text(`- ${targetPaths}`, { indent: 20 });
       }
       
-      doc.moveDown(3);
-      doc.fontSize(10).font('Helvetica-Oblique').text('Note: This operation overwrites file content with random bytes and removes the file from the filesystem. If a free-space wipe was performed, it targeted the unallocated space on the drive.', { align: 'center' });
+      doc.moveDown(2);
+      
+      // Embed QR Code in PDF
+      doc.image(qrCodeDataUri, doc.page.width / 2 - 50, doc.y, { fit: [100, 100] });
+      doc.moveDown(6);
+      
+      doc.fontSize(10).font('Helvetica-Oblique').text('Note: This operation overwrites file content with random bytes and removes the file from the filesystem.', { align: 'center' });
       
       doc.end();
       
       writeStream.on('finish', () => {
-        resolve({ certId, filePath, timestamp, wipeMode, targetPaths });
+        resolve({ certId, filePath, timestamp, wipeMode, targetPaths, verificationUrl });
       });
       
       writeStream.on('error', (err) => {

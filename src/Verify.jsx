@@ -33,34 +33,35 @@ export default function Verify() {
 
   return (
     <div className="app-container">
-      <div className="glass-panel" style={{ textAlign: 'center', maxWidth: '500px', margin: '0 auto' }}>
-        <h1 style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '2rem' }}>
-          <Shield size={32} color="#60a5fa" /> Verification Portal
+      <div className="glass-panel verify-container">
+        <h1 className="verify-header">
+          <Shield size={36} color="#60a5fa" /> Verification Portal
         </h1>
         
         {loading ? (
-          <div>
+          <div className="verify-status-box">
             <div className="spinner"></div>
-            <p>Searching database for certificate...</p>
+            <p>Searching database securely...</p>
           </div>
         ) : error ? (
-          <div style={{ color: 'var(--danger-color)' }}>
+          <div className="verify-status-box verify-status-error">
             <XCircle size={64} style={{ margin: '0 auto 1rem' }} />
-            <h2>Verification Failed</h2>
-            <p style={{ marginTop: '0.5rem', color: 'var(--text-secondary)' }}>
-              This certificate ID is invalid, or the secure wiping was never recorded.
+            <h2 style={{ marginBottom: '1rem' }}>Verification Failed</h2>
+            <p style={{ color: 'var(--text-secondary)' }}>
+              This certificate ID is invalid, or the secure wiping was never recorded on our network.
             </p>
           </div>
         ) : (
-          <div style={{ color: 'var(--success-color)' }}>
+          <div className="verify-status-box verify-status-success">
             <CheckCircle size={64} style={{ margin: '0 auto 1rem' }} />
             <h2>Verified Authentic</h2>
+            <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>The data wiping operation has been confirmed.</p>
             
-            <div className="certificate-info" style={{ marginTop: '2rem', color: 'var(--text-primary)', textAlign: 'left' }}>
-              <p><span>Certificate ID:</span> {certData.certificateId}</p>
-              <p><span>Wipe Mode:</span> {certData.wipeMode}</p>
-              <p><span>Completion Time:</span> {new Date(certData.timestamp).toLocaleString()}</p>
-              <p><span>Status:</span> 100% Permanently Destroyed</p>
+            <div className="certificate-info" style={{ marginTop: '2rem' }}>
+              <p><span>Certificate ID:</span> <strong>{certData.certificateId}</strong></p>
+              <p><span>Wipe Mode:</span> <strong>{certData.wipeMode}</strong></p>
+              <p><span>Completion Time:</span> <strong>{new Date(certData.timestamp).toLocaleString()}</strong></p>
+              <p><span>Status:</span> <strong style={{color: 'var(--success-color)'}}>100% Permanently Destroyed</strong></p>
             </div>
           </div>
         )}

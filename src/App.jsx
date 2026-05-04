@@ -123,20 +123,21 @@ function App() {
             <h2 className="success-title">Wipe Complete</h2>
             <p>Your data has been permanently erased.</p>
             
-            <div style={{ marginTop: '1.5rem', marginBottom: '1rem', background: 'white', padding: '1rem', borderRadius: '8px', display: 'inline-block' }}>
+            <div className="qr-code-wrapper">
               <QRCodeSVG 
                 value={`https://data-wiping-6bb65.web.app/verify?id=${successData.certificateId}`} 
                 size={128} 
               />
             </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Scan to verify certificate</p>
+            <p className="qr-caption">Scan to verify certificate</p>
 
             <div className="certificate-info">
-              <p><span>Certificate ID:</span> {successData.certificateId}</p>
-              <p><span>Mode:</span> {successData.wipeMode}</p>
-              <p><span>Time:</span> {new Date(successData.timestamp).toLocaleString()}</p>
-              <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--accent-color)' }}>
-                PDF Certificate saved to: {successData.path}
+              <p><span>Certificate ID:</span> <strong>{successData.certificateId}</strong></p>
+              <p><span>Mode:</span> <strong>{successData.wipeMode}</strong></p>
+              <p><span>Time:</span> <strong>{new Date(successData.timestamp).toLocaleString()}</strong></p>
+              <p style={{ flexDirection: 'column', alignItems: 'flex-start', color: 'var(--accent-color)' }}>
+                <span style={{color: 'var(--text-secondary)'}}>Saved locally to:</span> 
+                {successData.path}
               </p>
             </div>
             

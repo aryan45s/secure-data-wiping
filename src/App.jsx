@@ -1,3 +1,5 @@
+import { QRCodeSVG } from 'qrcode.react';
+
 import React, { useState } from 'react';
 import { Shield, FileWarning, HardDrive, Trash2, CheckCircle, File, Folder, AlertTriangle } from 'lucide-react';
 import { saveCertificate } from './firebase/config';

@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
-
+import { getFirestore, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJfsg21ves7rbAnm5yhr-uomKTOAGserE",
@@ -33,3 +32,10 @@ export const saveCertificate = async (certificateData) => {
     throw error;
   }
 };
+
+export const getCertificateById = async (certificateId) => {
+  if (!db) return null;
+  try {
+    const q = query(collection(db, "certificates"), where("certificateId", "==", certificateId));
+    const querySnapshot = await getDocs(q);
+    

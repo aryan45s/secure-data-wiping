@@ -62,12 +62,23 @@ function App() {
     e.stopPropagation();
     setIsDragging(false);
     
-    // Extract paths from dropped files using HTML5 File API. Electron sets file.path
-    const droppedFiles = Array.from(e.dataTransfer.files).map(file => file.path).filter(Boolean);
-    
-    if (droppedFiles.length > 0) {
-      setSelectedPaths(prev => [...new Set([...prev, ...droppedFiles])]);
+    try {
+      const files = Array.from(e.dataTransfer.files);
+      if (!files || files.length === 0) {
+        setErrorMsg("No files detected in drop event. Make sure you are dragging actual files.");
+        return;
+      }
+      
+      const paths = files.map(file => file.path).filter(Boolean);
+      if (paths.length === 0) {
+        setErrorMsg("Could not retrieve absolute paths from the dragged files.");
+        return;
+      }
+      
+      setSelectedPaths(prev => [...new Set([...prev, ...paths])]);
       setErrorMsg(null);
+    } catch (err) {
+      setErrorMsg("Drag & Drop Error: " + err.message);
     }
   };
 
@@ -226,7 +237,11 @@ function App() {
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
+                  style={{ position: 'relative' }}
                 >
+                  {isDragging && (
+                    <div style={{ position: 'absolute', inset: 0, zIndex: 10 }} />
+                  )}
                   <p className="drop-zone-text">Drag & drop files or folders here</p>
                   <div className="btn-group">
                     <button className="btn btn-secondary" onClick={handleSelectFiles}><File size={18} /> Select Files</button>

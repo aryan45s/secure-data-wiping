@@ -13,7 +13,6 @@ function App() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [successData, setSuccessData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleSelectFiles = async () => {
     if (window.api) {
@@ -37,49 +36,6 @@ function App() {
 
   const removePath = (pathToRemove) => {
     setSelectedPaths(prev => prev.filter(p => p !== pathToRemove));
-  };
-
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    
-    try {
-      const files = Array.from(e.dataTransfer.files);
-      if (!files || files.length === 0) {
-        setErrorMsg("No files detected in drop event. Make sure you are dragging actual files.");
-        return;
-      }
-      
-      const paths = files.map(file => file.path).filter(Boolean);
-      if (paths.length === 0) {
-        setErrorMsg("Could not retrieve absolute paths from the dragged files.");
-        return;
-      }
-      
-      setSelectedPaths(prev => [...new Set([...prev, ...paths])]);
-      setErrorMsg(null);
-    } catch (err) {
-      setErrorMsg("Drag & Drop Error: " + err.message);
-    }
   };
 
   const executeWipe = async () => {
@@ -231,18 +187,7 @@ function App() {
             {wipeMode === 'file' ? (
               <div className="form-group">
                 <label className="form-label">Target Data</label>
-                <div 
-                  className={`drop-zone ${isDragging ? 'active' : ''}`}
-                  onDragEnter={handleDragEnter}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  style={{ position: 'relative' }}
-                >
-                  {isDragging && (
-                    <div style={{ position: 'absolute', inset: 0, zIndex: 10 }} />
-                  )}
-                  <p className="drop-zone-text">Drag & drop files or folders here</p>
+                <div className="file-selector">
                   <div className="btn-group">
                     <button className="btn btn-secondary" onClick={handleSelectFiles}><File size={18} /> Select Files</button>
                     <button className="btn btn-secondary" onClick={handleSelectDirectory}><Folder size={18} /> Select Folder</button>

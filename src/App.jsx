@@ -68,11 +68,11 @@ function App() {
             wipeMode: wipeMode === 'file' ? 'File Overwrite' : 'Free Space Wipe',
             path: certResult.path.filePath
           };
-          
+
           try {
             saveCertificate(certData).catch(e => console.warn("Firebase save delayed or failed:", e));
           } catch (e) {
-             console.warn("Failed to save to Firebase, but local cert generated.");
+            console.warn("Failed to save to Firebase, but local cert generated.");
           }
 
           setSuccessData(certData);
@@ -81,7 +81,7 @@ function App() {
           throw new Error("Failed to generate certificate: " + certResult.error);
         }
       } else {
-         throw new Error("Wipe operation failed: " + wipeResult.error);
+        throw new Error("Wipe operation failed: " + wipeResult.error);
       }
     } catch (err) {
       setErrorMsg(err.message || "An unexpected error occurred.");
@@ -112,21 +112,21 @@ function App() {
             <div className="spinner"></div>
             <h2>Wiping Data Securely...</h2>
             <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-              {wipeMode === 'file' 
-                ? 'Overwriting files with random bytes and deleting...' 
+              {wipeMode === 'file'
+                ? 'Overwriting files with random bytes and deleting...'
                 : 'Overwriting free space on disk. This may take a while...'}
             </p>
           </div>
-               ) : successData ? (
+        ) : successData ? (
           <div className="success-container">
             <CheckCircle size={64} className="success-icon" />
             <h2 className="success-title">Wipe Complete</h2>
             <p>Your data has been permanently erased.</p>
-            
+
             <div className="qr-code-wrapper">
-              <QRCodeSVG 
-                value={`https://data-wiping-6bb65.web.app/verify?id=${successData.certificateId}`} 
-                size={128} 
+              <QRCodeSVG
+                value={`https://data-wiping-6bb65.web.app/verify?id=${successData.certificateId}`}
+                size={128}
               />
             </div>
             <p className="qr-caption">Scan to verify certificate</p>
@@ -136,11 +136,11 @@ function App() {
               <p><span>Mode:</span> <strong>{successData.wipeMode}</strong></p>
               <p><span>Time:</span> <strong>{new Date(successData.timestamp).toLocaleString()}</strong></p>
               <p style={{ flexDirection: 'column', alignItems: 'flex-start', color: 'var(--accent-color)' }}>
-                <span style={{color: 'var(--text-secondary)'}}>Saved locally to:</span> 
+                <span style={{ color: 'var(--text-secondary)' }}>Saved locally to:</span>
                 {successData.path}
               </p>
             </div>
-            
+
             <button className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }} onClick={() => setSuccessData(null)}>
               Start New Wipe
             </button>
@@ -152,11 +152,11 @@ function App() {
               <label className="form-label">Select Wipe Mode</label>
               <div className="radio-group">
                 <label className="radio-card">
-                  <input 
-                    type="radio" 
-                    name="wipeMode" 
-                    value="file" 
-                    checked={wipeMode === 'file'} 
+                  <input
+                    type="radio"
+                    name="wipeMode"
+                    value="file"
+                    checked={wipeMode === 'file'}
                     onChange={() => setWipeMode('file')}
                   />
                   <div className="radio-content">
@@ -165,11 +165,11 @@ function App() {
                   </div>
                 </label>
                 <label className="radio-card">
-                  <input 
-                    type="radio" 
-                    name="wipeMode" 
-                    value="freespace" 
-                    checked={wipeMode === 'freespace'} 
+                  <input
+                    type="radio"
+                    name="wipeMode"
+                    value="freespace"
+                    checked={wipeMode === 'freespace'}
                     onChange={() => setWipeMode('freespace')}
                   />
                   <div className="radio-content">
@@ -185,16 +185,16 @@ function App() {
                 <label className="form-label">Target Data</label>
                 <div className="file-selector">
                   <div className="btn-group">
-                    <button className="btn btn-secondary" onClick={handleSelectFiles}><File size={18}/> Select Files</button>
-                    <button className="btn btn-secondary" onClick={handleSelectDirectory}><Folder size={18}/> Select Folder</button>
+                    <button className="btn btn-secondary" onClick={handleSelectFiles}><File size={18} /> Select Files</button>
+                    <button className="btn btn-secondary" onClick={handleSelectDirectory}><Folder size={18} /> Select Folder</button>
                   </div>
-                  
+
                   {selectedPaths.length > 0 && (
                     <div className="selected-files">
                       <p>{selectedPaths.length} item(s) selected:</p>
                       <ul className="file-list">
                         {selectedPaths.map((path, idx) => (
-                          <li key={idx}><File size={14} color="var(--text-secondary)"/> {path}</li>
+                          <li key={idx}><File size={14} color="var(--text-secondary)" /> {path}</li>
                         ))}
                       </ul>
                     </div>
@@ -204,9 +204,9 @@ function App() {
             ) : (
               <div className="form-group">
                 <label className="form-label">Target Drive (Non-System Only)</label>
-                <select 
-                  className="drive-selector" 
-                  value={selectedDrive} 
+                <select
+                  className="drive-selector"
+                  value={selectedDrive}
                   onChange={(e) => setSelectedDrive(e.target.value)}
                 >
                   {drives.map(drive => (
@@ -219,8 +219,8 @@ function App() {
               </div>
             )}
 
-            <button 
-              className="btn btn-danger" 
+            <button
+              className="btn btn-danger"
               onClick={() => setShowConfirm(true)}
               disabled={wipeMode === 'file' && selectedPaths.length === 0}
             >

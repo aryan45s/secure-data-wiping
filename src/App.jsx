@@ -13,6 +13,7 @@ function App() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [successData, setSuccessData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleSelectFiles = async () => {
     if (window.api) {
@@ -31,6 +32,33 @@ function App() {
         setSelectedPaths(prev => [...new Set([...prev, ...paths])]);
         setErrorMsg(null);
       }
+    }
+  };
+
+  const removePath = (pathToRemove) => {
+    setSelectedPaths(prev => prev.filter(p => p !== pathToRemove));
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    // Extract paths from dropped files using HTML5 File API. Electron sets file.path
+    const droppedFiles = Array.from(e.dataTransfer.files).map(file => file.path).filter(Boolean);
+    
+    if (droppedFiles.length > 0) {
+      setSelectedPaths(prev => [...new Set([...prev, ...droppedFiles])]);
+      setErrorMsg(null);
     }
   };
 
@@ -109,12 +137,12 @@ function App() {
 
         {isWiping ? (
           <div className="progress-container">
-            <div className="spinner"></div>
+            <div className="radar-spinner"></div>
             <h2>Wiping Data Securely...</h2>
             <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
               {wipeMode === 'file'
-                ? 'Overwriting files with random bytes and deleting...'
-                : 'Overwriting free space on disk. This may take a while...'}
+                ? 'Scrubbing files with random bytes and permanently deleting...'
+                : 'Scrubbing free space on disk. This may take a while...'}
             </p>
           </div>
         ) : successData ? (
@@ -183,23 +211,34 @@ function App() {
             {wipeMode === 'file' ? (
               <div className="form-group">
                 <label className="form-label">Target Data</label>
-                <div className="file-selector">
+                <div 
+                  className={`drop-zone ${isDragging ? 'active' : ''}`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  <p className="drop-zone-text">Drag & drop files or folders here</p>
                   <div className="btn-group">
                     <button className="btn btn-secondary" onClick={handleSelectFiles}><File size={18} /> Select Files</button>
                     <button className="btn btn-secondary" onClick={handleSelectDirectory}><Folder size={18} /> Select Folder</button>
                   </div>
-
-                  {selectedPaths.length > 0 && (
-                    <div className="selected-files">
-                      <p>{selectedPaths.length} item(s) selected:</p>
-                      <ul className="file-list">
-                        {selectedPaths.map((path, idx) => (
-                          <li key={idx}><File size={14} color="var(--text-secondary)" /> {path}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </div>
+
+                {selectedPaths.length > 0 && (
+                  <div className="selected-files" style={{ marginTop: '1rem' }}>
+                    <p>{selectedPaths.length} item(s) selected:</p>
+                    <ul className="file-list">
+                      {selectedPaths.map((path, idx) => (
+                        <li key={idx}>
+                          <span><File size={14} color="var(--accent-color)" /> {path}</span>
+                          <button className="remove-btn" onClick={() => removePath(path)} title="Remove from queue">
+                            <Trash2 size={16} />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="form-group">

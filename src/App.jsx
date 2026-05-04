@@ -39,18 +39,27 @@ function App() {
     setSelectedPaths(prev => prev.filter(p => p !== pathToRemove));
   };
 
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(true);
   };
 
   const handleDragLeave = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
     
     // Extract paths from dropped files using HTML5 File API. Electron sets file.path
@@ -213,6 +222,7 @@ function App() {
                 <label className="form-label">Target Data</label>
                 <div 
                   className={`drop-zone ${isDragging ? 'active' : ''}`}
+                  onDragEnter={handleDragEnter}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}

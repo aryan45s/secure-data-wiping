@@ -12,7 +12,7 @@ function generateCertificate(data) {
       const certId = uuidv4();
       const timestamp = new Date().toISOString();
       
-      // Create a verification URL (replace with your actual hosted verification page later)
+      // Create a verification URL
       const verificationUrl = `https://data-wiping-6bb65.web.app/verify?id=${certId}`;
       
       // Generate QR Code as a Data URI

@@ -38,4 +38,12 @@ export const getCertificateById = async (certificateId) => {
   try {
     const q = query(collection(db, "certificates"), where("certificateId", "==", certificateId));
     const querySnapshot = await getDocs(q);
-    
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].data(); // Return the first matching certificate
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching document: ", error);
+    return null;
+  }
+};

@@ -97,7 +97,11 @@ function App() {
   const drives = ['D:', 'E:', 'F:', 'G:', 'H:', 'I:', 'J:', 'K:', 'Z:'];
 
   return (
-    <div className="app-container">
+    <>
+      <div className="ambient-orb orb-1"></div>
+      <div className="ambient-orb orb-2"></div>
+      
+      <div className="app-container">
         <div className="header">
           <div className="header-icon-wrapper">
             <Shield size={48} color="var(--accent-color)" />
